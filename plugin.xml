@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugin xmlns="http://apache.org/cordova/ns/plugins/1.0" id="cordova-plugin-pos-manager" version="0.0.1">
+    <name>Pos</name>
+    <description>Cordova PoS Manager Plugin</description>
+    <license>MIT</license>
+    <keywords>cordova,pos</keywords>
+    
+    <js-module name="AndroidPoSManager" src="www/posManager.js">
+        <clobbers target="cordova.plugins.posManager" />
+    </js-module>
+    <engines>
+        <engine name="cordova" version=">=3.6.0"></engine>
+    </engines>
+    <platform name="android">
+        <source-file src="src/android/com/pos/sdkdemo/base/AndroidPoSManager.java"
+                     target-dir="src/com/pos/sdkdemo/base"></source-file>
+
+        <config-file target="res/xml/config.xml" parent="/*">
+            <feature name="AndroidPoSManager">
+                <param name="android-package" value="com.pos.sdkdemo.base.AndroidPoSManager" />
+            </feature>
+        </config-file>
+    </platform>
+</plugin>
