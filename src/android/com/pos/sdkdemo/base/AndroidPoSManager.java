@@ -15,20 +15,35 @@ import android.app.Application;
 import com.basewin.database.DataBaseManager;
 import com.basewin.services.ServiceManager;
 import com.pos.sdkdemo.utils.GlobalData;
+public class AndroidPoSManager extends CordovaPlugin {
+	private static final String TAG = "PoSApplication";
+    private static AndroidPoSManager instance;
 
-/**
- * Created by Administrator on 2016/11/30.
- */
-
-public class DemoApplication extends Application{
-    private static final String TAG = "DemoApplication";
-    private static DemoApplication instance;
-
-    public static DemoApplication getInstance() {
+    public static AndroidPoSManager getInstance() {
         return instance;
     }
-    @Override
-    public void onCreate() {
+    //@Override
+    //public void onCreate() {
+    //    super.onCreate();
+    //    instance = this;
+    //    /**
+    //     * init Device Server
+    //     */
+	//	ServiceManager.getInstence().init(getApplicationContext());
+    //    /**
+    //     * init database
+    //     */
+    //    DataBaseManager.getInstance().init(getApplicationContext());
+    //    /**
+    //     * init the GlobalData cashe
+    //     */
+    //    GlobalData.getInstance().init(this);
+    //}
+	
+	
+	
+	@Override
+    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
         super.onCreate();
         instance = this;
         /**
@@ -45,75 +60,13 @@ public class DemoApplication extends Application{
         GlobalData.getInstance().init(this);
     }
 
-}
-
-
-//////////////////////////////////////////////////////////////////
-package com.codingsans.ionic.sensormanager;
-
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.CordovaInterface;
-import org.apache.cordova.CordovaWebView;
-import org.apache.cordova.CordovaPlugin;
-import org.apache.cordova.PluginResult;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONException;
-
-import android.content.Context;
-import android.hardware.SensorManager;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorEvent;
-import android.hardware.Sensor;
-
-public class AndroidSensorManager extends CordovaPlugin {
-    private SensorManager mSensorManager;
-    private Sensor accelerometer;
-    private CallbackContext callbackContext;
-    private JSONObject data = new JSONObject();
-
-    @Override
-    public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-        super.initialize(cordova, webView);
-
-        mSensorManager = (SensorManager) cordova.getActivity().getSystemService(Context.SENSOR_SERVICE);
-        accelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-    }
-
     @Override
     public void onDestroy() {
-        mSensorManager.unregisterListener(listener);
+        //mSensorManager.unregisterListener(listener);
     }
 
     @Override
     public boolean execute(String action, JSONArray args, CallbackContext callbackContext) throws JSONException {
-        if ("start".equals(action)) {
-            mSensorManager.registerListener(listener, accelerometer, SensorManager.SENSOR_DELAY_UI);
-        } else if ("stop".equals(action)) {
-            mSensorManager.unregisterListener(listener);
-        } else if ("getCurrent".equals(action)) {
-            PluginResult result = new PluginResult(PluginResult.Status.OK, this.data);
-            callbackContext.sendPluginResult(result);
-            return true;
-        }
-        return false;  // Returning false results in a "MethodNotFound" error.
+       return true;  // Returning false results in a "MethodNotFound" error.
     }
-
-    private SensorEventListener listener = new SensorEventListener() {
-        public void onSensorChanged(SensorEvent event) {
-          if (event.sensor.getType() == Sensor.TYPE_ACCELEROMETER) {
-              data = new JSONObject();
-              try {
-                  data.put("x", event.values[0]);
-                  data.put("y", event.values[1]);
-                  data.put("z", event.values[2]);
-              } catch(JSONException e) {}
-          }
-        }
-
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // unused
-        }
-    };
 }

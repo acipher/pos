@@ -1,29 +1,29 @@
-var DeviceSensorLoader = function(require, exports, module) {
+var DevicePosLoader = function(require, exports, module) {
   var exec = require('cordova/exec');
 
   var intervalId;
   
-  function DeviceSensor() {}
+  function DevicePos() {}
 
-  DeviceSensor.prototype.start = function(success, failure, timeOffset) {
-    exec(success, failure, 'AndroidSensorManager', 'start', []);
+  DevicePos.prototype.start = function(success, failure, timeOffset) {
+    exec(success, failure, 'AndroidPoSManager', 'start', []);
     intervalId = setInterval(function() {
-      exec(success, failure, 'AndroidSensorManager', 'getCurrent', []);
+      exec(success, failure, 'AndroidPoSManager', 'getCurrent', []);
     }, timeOffset || 500);
   };
 
-  DeviceSensor.prototype.stop = function(success, failure) {
+  DevicePos.prototype.stop = function(success, failure) {
     if (intervalId) {
       clearInterval(intervalId);
       intervalId = null;
     }
-    exec(success, failure, 'AndroidSensorManager', 'stop', []);
+    exec(success, failure, 'AndroidPoSManager', 'stop', []);
   };
   
-  var deviceSensor = new DeviceSensor();
-  module.exports = deviceSensor;
+  var devicePos = new DevicePos();
+  module.exports = devicePos;
 };
 
-DeviceSensorLoader(require, exports, module);
+DevicePosLoader(require, exports, module);
 
-cordova.define("cordova/plugin/DeviceSensor", DeviceSensorLoader);
+cordova.define("cordova/plugin/DevicePos", DevicePosLoader);
